@@ -52,23 +52,24 @@ export const MacbookScroll = ({
 
   const scaleX = useTransform(
     scrollYProgress,
-    [0, 0.3],
-    [1.2, isMobile ? 1 : 1.5],
+    [0, 0.25, 0.65],
+    [1.2, isMobile ? 1.05 : 1.45, isMobile ? 1.35 : 2.2],
   );
   const scaleY = useTransform(
     scrollYProgress,
-    [0, 0.3],
-    [0.6, isMobile ? 1 : 1.5],
+    [0, 0.25, 0.65],
+    [0.6, isMobile ? 1.05 : 1.45, isMobile ? 1.35 : 2.2],
   );
-  const translate = useTransform(scrollYProgress, [0, 0.3, 1], [0, 0, 0]);
-  const rotate = useTransform(scrollYProgress, [0.05, 0.15, 0.3], [-28, -28, 0]);
-  const textTransform = useTransform(scrollYProgress, [0, 0.3], [0, 80]);
-  const textOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
+  const translate = useTransform(scrollYProgress, [0, 0.25, 0.65, 1], [0, 0, 0, 0]);
+  const rotate = useTransform(scrollYProgress, [0.02, 0.12, 0.25], [-28, -28, 0]);
+  const textTransform = useTransform(scrollYProgress, [0, 0.2], [0, 80]);
+  const textOpacity = useTransform(scrollYProgress, [0, 0.18], [1, 0]);
+  const backOpacity = useTransform(scrollYProgress, [0.12, 0.25], [1, 0]);
 
   return (
     <div
       ref={ref}
-      className="flex min-h-[135vh] shrink-0 scale-[0.35] transform flex-col items-center justify-start py-0 [perspective:800px] sm:scale-50 md:scale-100 md:py-24"
+      className="flex min-h-[160vh] shrink-0 scale-[0.35] transform flex-col items-center justify-start py-0 [perspective:800px] sm:scale-50 md:scale-100 md:py-20"
     >
       <motion.h2
         style={{
@@ -90,6 +91,7 @@ export const MacbookScroll = ({
         scaleY={scaleY}
         rotate={rotate}
         translate={translate}
+        backOpacity={backOpacity}
       />
       {/* Base area */}
       <div className="relative -z-10 h-[22rem] w-[32rem] overflow-hidden rounded-2xl bg-gray-200 dark:bg-[#272729]">
@@ -125,18 +127,21 @@ export const Lid = ({
   rotate,
   translate,
   src,
+  backOpacity,
 }: {
   scaleX: MotionValue<number>;
   scaleY: MotionValue<number>;
   rotate: MotionValue<number>;
   translate: MotionValue<number>;
   src?: string;
+  backOpacity?: MotionValue<number>;
 }) => {
   return (
     <div className="relative [perspective:800px]">
-      <div
+      <motion.div
         style={{
-          transform: "perspective(800px) rotateX(-25deg) translateZ(0px)",
+          rotateX: rotate,
+          opacity: backOpacity,
           transformOrigin: "bottom",
           transformStyle: "preserve-3d",
         }}
@@ -152,7 +157,7 @@ export const Lid = ({
             <AceternityLogo />
           </span>
         </div>
-      </div>
+      </motion.div>
       <motion.div
         style={{
           scaleX: scaleX,

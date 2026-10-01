@@ -256,17 +256,6 @@ button:focus-visible, a:focus-visible { outline: 2px solid currentColor; outline
 .project-showcase-stage { position: relative; z-index: 1; max-width: 1170px; margin: clamp(24px, 4vw, 44px) auto clamp(36px, 5vw, 60px); padding: 0 clamp(20px, 6vw, 90px); }
 .signbridge-showcase-container { display: flex; flex-direction: column; gap: 20px; }
 
-/* Award Banner */
-.award-banner { position: relative; overflow: hidden; border-radius: 14px; padding: 18px 24px; background: linear-gradient(135deg, #1b170c 0%, #2a220f 50%, #15130b 100%); border: 1px solid rgba(234,179,8,.38); box-shadow: 0 10px 25px rgba(0,0,0,.35), inset 0 1px 0 rgba(254,240,138,.2); display: flex; flex-direction: column; gap: 8px; }
-.award-badge-glow { position: absolute; top: -40px; right: 20%; width: 220px; height: 100px; background: radial-gradient(circle, rgba(234,179,8,.22), transparent 70%); pointer-events: none; }
-.award-pill { display: inline-flex; align-items: center; gap: 9px; flex-wrap: wrap; }
-.award-trophy-icon { color: #facc15; filter: drop-shadow(0 0 6px rgba(250,204,21,.6)); flex-shrink: 0; }
-.award-title { font: 800 12px/1 Consolas, monospace; letter-spacing: .12em; color: #fef08a; text-transform: uppercase; }
-.award-divider { color: rgba(250,204,21,.4); font-size: 12px; }
-.award-venue { font: 600 11px/1 Consolas, monospace; letter-spacing: .08em; color: #fde047; }
-.award-subline { margin: 0; color: #d4d0c5; font-size: 13px; line-height: 1.5; }
-.award-subline strong { color: #ffffff; font-weight: 700; }
-
 /* Showcase Workstation */
 .showcase-workstation { background: #0c0d0e; border: 1px solid rgba(255,255,255,.14); border-radius: 16px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.12); }
 .workstation-chrome { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 18px; background: #141518; border-bottom: 1px solid rgba(255,255,255,.08); }
@@ -374,7 +363,6 @@ button:focus-visible, a:focus-visible { outline: 2px solid currentColor; outline
 .project-details { position: relative; z-index: 2; display: grid; grid-template-columns: .55fr 1.2fr .9fr; gap: 40px; align-items: start; max-width: 1170px; margin: 0 auto; padding: 0 clamp(20px, 6vw, 90px); }
 .project-number { font: 10px/1.5 Consolas, monospace; }
 .project-number strong { font: 800 clamp(48px, 5vw, 85px)/.8 Arial,sans-serif; letter-spacing: -.1em; }
-.story-award-tag { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 6px; background: #fef08a; border: 1px solid #eab308; color: #854d0e; font: 800 9px Consolas, monospace; letter-spacing: .08em; margin-bottom: 12px; }
 .trophy-gold { color: #ca8a04; flex-shrink: 0; }
 .project-story h3 { margin: 0 0 14px; font-size: clamp(26px, 3.2vw, 42px); font-weight: 800; letter-spacing: -.05em; line-height: 1.05; }
 .project-story p { max-width: 530px; margin: 0; font-size: 15px; line-height: 1.55; color: #374151; }
@@ -465,7 +453,6 @@ button:focus-visible, a:focus-visible { outline: 2px solid currentColor; outline
   .lightbox-nav-btn.next { right: 8px; }
   .project-section { padding-top: 60px; }
   .project-showcase-stage { padding: 0 14px; }
-  .award-banner { padding: 14px 16px; }
   .showcase-tabs-bar { flex-direction: column; align-items: stretch; gap: 10px; }
   .showcase-tabs { overflow-x: auto; padding-bottom: 4px; }
   .showcase-quick-actions { justify-content: flex-end; }

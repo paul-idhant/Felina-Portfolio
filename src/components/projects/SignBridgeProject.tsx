@@ -1,4 +1,4 @@
-import { ArrowUpRight, Trophy, Award } from 'lucide-react'
+import { ArrowUpRight, Award } from 'lucide-react'
 import { SignBridgeShowcase } from './SignBridgeShowcase'
 import { portfolio } from '../../data/portfolio'
 
@@ -17,12 +17,12 @@ export function SignBridgeProject() {
         </p>
       </div>
 
-      {/* Modern Interactive Project Showcase (Replacing MacBook scroll) */}
+      {/* Modern Interactive Project Showcase */}
       <div className="project-showcase-stage">
         <SignBridgeShowcase />
       </div>
 
-      {/* Project Story & Science Exhibition Award Spotlight */}
+      {/* Project Story */}
       <div className="project-details">
         <div className="project-number">
           PROJECT<br />
@@ -30,10 +30,6 @@ export function SignBridgeProject() {
         </div>
 
         <div className="project-story">
-          <div className="story-award-tag">
-            <Trophy size={14} className="trophy-gold" />
-            <span>ALL INDIA SCIENCE EXHIBITION WINNER · BHAVAN PRESS SCHOOL</span>
-          </div>
           <h3>Breaking Communication Barriers with Human-Centric AI</h3>
           <p>
             SignBridge is an assistive communication system engineered to bridge the divide between Deaf and hearing communities across India. Built with on-device computer vision and natural language models, it delivers seamless bidirectional translation: converting Indian Sign Language (ISL) hand landmarks into real-time text/speech, and transcribing spoken voice into visual sign cues.

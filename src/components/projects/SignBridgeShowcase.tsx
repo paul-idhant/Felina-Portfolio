@@ -34,26 +34,6 @@ export function SignBridgeShowcase() {
 
   return (
     <div className="signbridge-showcase-container">
-      {/* Prestigious Award Ribbon / Banner */}
-      <motion.div
-        className="award-banner"
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="award-badge-glow" />
-        <div className="award-pill">
-          <Trophy className="award-trophy-icon" size={16} />
-          <span className="award-title">WINNER · ALL INDIA SCIENCE EXHIBITION</span>
-          <span className="award-divider">|</span>
-          <span className="award-venue">Conducted at Bhavan Press School</span>
-        </div>
-        <p className="award-subline">
-          Awarded <strong>1st Prize</strong> for groundbreaking human-first AI accessibility &amp; real-time Indian Sign Language bidirectional translation.
-        </p>
-      </motion.div>
-
       {/* Main Workstation / Studio Mockup */}
       <motion.div
         className="showcase-workstation"

@@ -468,7 +468,11 @@ export function DigiCam() {
               <X size={20} />
             </button>
 
-            <div className="lightbox-media-wrap">
+            <div
+              className="lightbox-media-wrap"
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+            >
               <button
                 type="button"
                 className="lightbox-nav-btn prev"

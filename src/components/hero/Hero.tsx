@@ -18,19 +18,27 @@ export function Hero() {
 
   useEffect(() => {
     let timeout: number | undefined
+    let wasBeyond = false
     const handleScroll = () => {
       const beyondHero = window.scrollY > Math.min(160, window.innerHeight * 0.18)
-      if (beyondHero) {
-        setHidden(true)
-        timeout = window.setTimeout(() => setMountedCard(false), reduced ? 0 : 520)
-      } else {
-        if (timeout) window.clearTimeout(timeout)
-        setMountedCard(true)
-        setHidden(false)
+      if (beyondHero !== wasBeyond) {
+        wasBeyond = beyondHero
+        if (beyondHero) {
+          setHidden(true)
+          if (timeout) window.clearTimeout(timeout)
+          timeout = window.setTimeout(() => setMountedCard(false), reduced ? 0 : 520)
+        } else {
+          if (timeout) window.clearTimeout(timeout)
+          setMountedCard(true)
+          setHidden(false)
+        }
       }
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => { window.removeEventListener('scroll', handleScroll); if (timeout) window.clearTimeout(timeout) }
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      if (timeout) window.clearTimeout(timeout)
+    }
   }, [reduced])
 
   return <section id="home" ref={ref} className="hero" aria-labelledby="hero-title">

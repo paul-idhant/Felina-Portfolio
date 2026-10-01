@@ -47,7 +47,7 @@ export function DigiCam() {
         {inView ? <ErrorBoundary fallback={<CameraFallback />}><Suspense fallback={<CameraFallback />}><CanonCamera current={current} showBack={showBack} isMobile={isMobile} /></Suspense></ErrorBoundary> : <CameraFallback />}
       </div>
       <div className="canon-hud">
-        <div><span className="canon-status-dot" /> <span>{showBack ? 'ARCHIVE / REAR DISPLAY' : 'CAMERA / FRONT VIEW'}</span></div>
+        <div><span className="canon-status-dot" /> <span>{showBack ? `ARCHIVE 0${index + 1} / 0${memories.length} · ${current.date}` : 'CAMERA / FRONT VIEW'}</span></div>
         <p>{showBack ? current.caption : 'Drag to inspect the camera. Turn it over to find the archive.'}</p>
       </div>
       <div className="canon-controls">

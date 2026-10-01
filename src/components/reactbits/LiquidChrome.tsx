@@ -72,16 +72,7 @@ export const LiquidChrome: React.FC<LiquidChromeProps> = ({
       }
 
       void main() {
-          vec4 col = vec4(0.0);
-          int samples = 0;
-          for (int i = -1; i <= 1; i++){
-              for (int j = -1; j <= 1; j++){
-                  vec2 offset = vec2(float(i), float(j)) * (1.0 / min(uResolution.x, uResolution.y));
-                  col += renderImage(vUv + offset);
-                  samples++;
-              }
-          }
-          gl_FragColor = col / float(samples);
+          gl_FragColor = renderImage(vUv);
       }
     `;
 
@@ -104,6 +95,7 @@ export const LiquidChrome: React.FC<LiquidChromeProps> = ({
     const mesh = new Mesh(gl, { geometry, program });
 
     function resize() {
+      if (!container) return;
       const scale = 1;
       renderer.setSize(container.offsetWidth * scale, container.offsetHeight * scale);
       const resUniform = program.uniforms.uResolution.value as Float32Array;
@@ -136,23 +128,32 @@ export const LiquidChrome: React.FC<LiquidChromeProps> = ({
     }
 
     if (interactive) {
-      container.addEventListener('mousemove', handleMouseMove);
-      container.addEventListener('touchmove', handleTouchMove);
+      container.addEventListener('mousemove', handleMouseMove, { passive: true });
+      container.addEventListener('touchmove', handleTouchMove, { passive: true });
     }
 
     let animationId: number;
+    let isPaused = false;
     function update(t: number) {
+      if (!isPaused) {
+        program.uniforms.uTime.value = t * 0.001 * speed;
+        renderer.render({ scene: mesh });
+      }
       animationId = requestAnimationFrame(update);
-      program.uniforms.uTime.value = t * 0.001 * speed;
-      renderer.render({ scene: mesh });
     }
     animationId = requestAnimationFrame(update);
+
+    function handleVisibility() {
+      isPaused = document.hidden;
+    }
+    document.addEventListener('visibilitychange', handleVisibility);
 
     container.appendChild(gl.canvas);
 
     return () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener('resize', resize);
+      document.removeEventListener('visibilitychange', handleVisibility);
       if (interactive) {
         container.removeEventListener('mousemove', handleMouseMove);
         container.removeEventListener('touchmove', handleTouchMove);

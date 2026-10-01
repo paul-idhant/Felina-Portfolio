@@ -17,7 +17,7 @@ export function Navigation() {
   }
   return (
     <header className="site-nav">
-      <a className="nav-monogram" href="#home" aria-label="Felina Doungel — back to home">FD<span>•</span>01</a>
+      <a className="nav-monogram" href="#home" onClick={(e) => { e.preventDefault(); go('home'); }} aria-label="Felina Doungel — back to home">FD<span>•</span>01</a>
       <button className="nav-menu" type="button" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="nav-links">
         <span>{open ? 'Close' : 'Index'}</span>{open ? <X size={16} /> : <Menu size={16} />}
       </button>

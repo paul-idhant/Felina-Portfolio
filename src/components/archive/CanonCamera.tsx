@@ -19,8 +19,10 @@ interface ModelProps {
 function MemoryScreen({ current }: { current: Memory }) {
   const texture = useTexture(current.src)
   useEffect(() => {
-    texture.colorSpace = THREE.SRGBColorSpace
-    texture.anisotropy = 4
+    if (texture) {
+      texture.colorSpace = THREE.SRGBColorSpace
+      texture.anisotropy = 4
+    }
   }, [texture])
 
   // Coordinates are in the original model's local units. The surrounding group
@@ -74,12 +76,12 @@ interface Props {
 export function CanonCamera({ current, showBack, isMobile }: Props) {
   return <Canvas
     shadows
-    dpr={[1, isMobile ? 1.15 : 1.5]}
+    dpr={[1, isMobile ? 1.15 : 1.35]}
     camera={{ fov: isMobile ? 31 : 25, position: [0, 0, isMobile ? 17 : 15] }}
     gl={{ antialias: true, powerPreference: 'high-performance' }}
   >
     <ambientLight intensity={0.5} />
-    <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1.4} castShadow shadow-mapSize={isMobile ? 1024 : 2048} />
+    <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1.4} castShadow shadow-mapSize={isMobile ? 512 : 1024} />
     <directionalLight position={[-0.3, 0, 10]} intensity={0.32} />
     <Suspense fallback={null}>
       <PresentationControls global snap damping={0.18} polar={[-Math.PI / 3, Math.PI / 3]} azimuth={[-Math.PI / 1.4, Math.PI / 2]}>
@@ -92,3 +94,10 @@ export function CanonCamera({ current, showBack, isMobile }: Props) {
 }
 
 useGLTF.preload('/assets/camera/canon-at1.glb')
+useTexture.preload([
+  '/photos/memory-01.svg',
+  '/photos/memory-02.svg',
+  '/photos/memory-03.svg',
+  '/photos/memory-04.svg',
+])
+

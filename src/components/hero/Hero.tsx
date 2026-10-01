@@ -56,7 +56,7 @@ export function Hero() {
         <TrueFocus sentence="student · creative · human-first" separator=" · " manualMode={reduced} blurAmount={reduced ? 0 : 3.5} borderColor="#ededeb" glowColor="rgba(255,255,255,.34)" animationDuration={reduced ? 0 : 0.55} pauseBetweenAnimations={1.65} />
       </div>
     </div>
-    {mountedCard && inView && <motion.div className="lanyard-stage" initial={{ opacity: 0, y: -16 }} animate={{ opacity: hidden ? 0 : 1, y: hidden ? -130 : 0, scale: hidden ? 0.95 : 1 }} transition={{ duration: reduced ? 0 : 0.48, ease: 'easeOut' }} style={{ pointerEvents: hidden ? 'none' : 'auto' }} aria-label="A draggable personal ID card">
+    {mountedCard && inView && <motion.div className="lanyard-stage" initial={{ opacity: 0, y: -16 }} animate={{ opacity: hidden ? 0 : 1, y: hidden ? -130 : 0, scale: hidden ? 0.95 : 1 }} transition={{ duration: reduced ? 0 : 0.48, ease: 'easeOut' }} style={{ pointerEvents: hidden ? 'none' : undefined }} aria-label="A draggable personal ID card">
       <ErrorBoundary fallback={<div className="lanyard-fallback"><img src="/assets/lanyard/felina-card-front.svg" alt="Felina Doungel personal ID card" /></div>}><Suspense fallback={<div className="lanyard-fallback"><img src="/assets/lanyard/felina-card-front.svg" alt="Felina Doungel personal ID card" /></div>}>
         <Lanyard position={[0, 0, 24]} gravity={[0, -40, 0]} fov={20} transparent frontImage="/assets/lanyard/felina-card-front.svg" backImage="/assets/lanyard/felina-card-back.svg" lanyardImage="/assets/lanyard/lanyard.png" lanyardWidth={1.05} />
       </Suspense></ErrorBoundary>

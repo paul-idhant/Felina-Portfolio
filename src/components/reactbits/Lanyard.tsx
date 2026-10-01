@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unknown-property */
 'use client';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Canvas, extend, useFrame, type ThreeElement, type ThreeEvent } from '@react-three/fiber';
+import { Canvas, extend, useFrame, useThree, type ThreeElement, type ThreeEvent } from '@react-three/fiber';
 import { useGLTF, useTexture, Environment, Lightformer } from '@react-three/drei';
 import {
   BallCollider,
@@ -153,6 +153,14 @@ function Band({
   lanyardImage = null,
   lanyardWidth = 1
 }: BandProps) {
+  const { width: vpWidth, height: vpHeight } = useThree((state) => state.viewport);
+  const { width: sizeWidth, height: sizeHeight } = useThree((state) => state.size);
+
+  const anchorX = isMobile
+    ? Math.min(Math.max(vpWidth * 0.15, 0.4), 1.2)
+    : Math.min(Math.max(vpWidth * 0.24, 2.2), vpWidth * 0.36);
+  const anchorY = Math.max(3.6, vpHeight * 0.46);
+
   const band = useRef<THREE.Mesh<InstanceType<typeof MeshLineGeometry>, InstanceType<typeof MeshLineMaterial>>>(null!);
   const fixed = useRef<RapierRigidBody>(null!);
   const j1 = useRef<LanyardRigidBody>(null!);
@@ -183,8 +191,6 @@ function Band({
 
   const { nodes, materials } = useGLTF(cardGLB) as any;
   const texture = useTexture(lanyardImage || lanyard);
-  // useTexture must be called unconditionally; use a blank pixel when an image
-  // isn't supplied for a given face, then skip compositing it below.
   const frontTex = useTexture(frontImage || BLANK_PIXEL);
   const backTex = useTexture(backImage || BLANK_PIXEL);
 
@@ -248,6 +254,24 @@ function Band({
     }
   }, [texture])
 
+  useEffect(() => {
+    if (fixed.current) {
+      fixed.current.setTranslation({ x: anchorX, y: anchorY, z: 0 }, true);
+    }
+  }, [anchorX, anchorY]);
+
+  useEffect(() => {
+    const releaseDrag = () => drag(false);
+    window.addEventListener('pointerup', releaseDrag);
+    window.addEventListener('pointercancel', releaseDrag);
+    window.addEventListener('blur', releaseDrag);
+    return () => {
+      window.removeEventListener('pointerup', releaseDrag);
+      window.removeEventListener('pointercancel', releaseDrag);
+      window.removeEventListener('blur', releaseDrag);
+    };
+  }, []);
+
   useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1]);
   useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1]);
   useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1]);
@@ -269,7 +293,8 @@ function Band({
     if (dragged && typeof dragged !== 'boolean') {
       vec.set(state.pointer.x, state.pointer.y, 0.5).unproject(state.camera);
       dir.copy(vec).sub(state.camera.position).normalize();
-      vec.add(dir.multiplyScalar(state.camera.position.length()));
+      const dist = -state.camera.position.z / (dir.z || 0.0001);
+      vec.copy(state.camera.position).add(dir.multiplyScalar(dist));
       [card, j1, j2, j3, fixed].forEach(ref => ref.current?.wakeUp());
       card.current?.setNextKinematicTranslation({
         x: vec.x - dragged.x,
@@ -296,34 +321,39 @@ function Band({
 
   return (
     <>
-      <group position={[0, 4, 0]}>
+      <group position={[anchorX, anchorY, 0]}>
         <RigidBody ref={fixed} {...segmentProps} type="fixed" />
-        <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps} type="dynamic">
+        <RigidBody position={[0.3, -0.3, 0]} ref={j1} {...segmentProps} type="dynamic">
           <BallCollider args={[0.1]} />
         </RigidBody>
-        <RigidBody position={[1, 0, 0]} ref={j2} {...segmentProps} type="dynamic">
+        <RigidBody position={[0.6, -0.6, 0]} ref={j2} {...segmentProps} type="dynamic">
           <BallCollider args={[0.1]} />
         </RigidBody>
-        <RigidBody position={[1.5, 0, 0]} ref={j3} {...segmentProps} type="dynamic">
+        <RigidBody position={[0.8, -1.0, 0]} ref={j3} {...segmentProps} type="dynamic">
           <BallCollider args={[0.1]} />
         </RigidBody>
         <RigidBody
-          position={[2, 0, 0]}
+          position={[0.8, -2.2, 0]}
           ref={card}
           {...segmentProps}
           type={dragged ? 'kinematicPosition' : 'dynamic'}
         >
           <CuboidCollider args={[0.8, 1.125, 0.01]} />
           <group
-            scale={2.25}
+            scale={isMobile ? 1.9 : 2.25}
             position={[0, -1.2, -0.05]}
             onPointerOver={() => hover(true)}
             onPointerOut={() => hover(false)}
             onPointerUp={(e: ThreeEvent<PointerEvent>) => {
-              (e.target as Element).releasePointerCapture(e.pointerId);
+              try {
+                (e.target as Element).releasePointerCapture(e.pointerId);
+              } catch {}
               drag(false);
             }}
+            onPointerCancel={() => drag(false)}
+            onLostPointerCapture={() => drag(false)}
             onPointerDown={(e: ThreeEvent<PointerEvent>) => {
+              e.stopPropagation();
               (e.target as Element).setPointerCapture(e.pointerId);
               drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())));
             }}
@@ -349,7 +379,7 @@ function Band({
         <meshLineMaterial
           color="white"
           depthTest={false}
-          resolution={isMobile ? [1000, 2000] : [1000, 1000]}
+          resolution={[sizeWidth || 1000, sizeHeight || 1000]}
           useMap={1}
           map={texture}
           repeat={[-4, 1]}

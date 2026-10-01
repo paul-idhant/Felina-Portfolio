@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { MotionValue, motion, useScroll, useTransform } from "motion/react";
 import { cn } from "@/lib/utils";
 import {
@@ -42,41 +42,33 @@ export const MacbookScroll = ({
     offset: ["start start", "end start"],
   });
 
-  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
-
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
   const scaleX = useTransform(
     scrollYProgress,
-    [0, 0.25, 0.65],
-    [1.2, isMobile ? 1.05 : 1.45, isMobile ? 1.35 : 2.2],
+    [0, 0.4, 0.85],
+    [1.08, 1, 1.06],
   );
   const scaleY = useTransform(
     scrollYProgress,
-    [0, 0.25, 0.65],
-    [0.6, isMobile ? 1.05 : 1.45, isMobile ? 1.35 : 2.2],
+    [0, 0.4, 0.85],
+    [0.65, 1, 1.06],
   );
-  const translate = useTransform(scrollYProgress, [0, 0.25, 0.65, 1], [0, 0, 0, 0]);
-  const rotate = useTransform(scrollYProgress, [0.02, 0.12, 0.25], [-28, -28, 0]);
-  const textTransform = useTransform(scrollYProgress, [0, 0.2], [0, 80]);
+  const translate = useTransform(scrollYProgress, [0, 1], [0, 0]);
+  const rotate = useTransform(scrollYProgress, [0.02, 0.38], [-28, 0]);
+  const textTransform = useTransform(scrollYProgress, [0, 0.22], [0, 40]);
   const textOpacity = useTransform(scrollYProgress, [0, 0.18], [1, 0]);
-  const backOpacity = useTransform(scrollYProgress, [0.12, 0.25], [1, 0]);
+  const backOpacity = useTransform(scrollYProgress, [0.08, 0.28], [1, 0]);
 
   return (
     <div
       ref={ref}
-      className="flex min-h-[160vh] shrink-0 scale-[0.35] transform flex-col items-center justify-start py-0 [perspective:800px] sm:scale-50 md:scale-100 md:py-20"
+      className="flex min-h-[78vh] md:min-h-[90vh] shrink-0 scale-[0.52] sm:scale-[0.78] md:scale-[1.18] lg:scale-[1.32] xl:scale-[1.42] transform flex-col items-center justify-start pt-2 pb-4 md:pt-4 md:pb-8 [perspective:1000px] [transform-origin:top_center]"
     >
       <motion.h2
         style={{
           translateY: textTransform,
           opacity: textOpacity,
         }}
-        className="mb-20 text-center text-3xl font-bold text-neutral-800 dark:text-white"
+        className="mb-8 md:mb-12 text-center text-3xl font-bold text-neutral-800 dark:text-white"
       >
         {title || (
           <span>
@@ -145,7 +137,7 @@ export const Lid = ({
           transformOrigin: "bottom",
           transformStyle: "preserve-3d",
         }}
-        className="relative h-[12rem] w-[32rem] rounded-2xl bg-[#010101] p-2"
+        className="relative h-96 w-[32rem] rounded-2xl bg-[#010101] p-2"
       >
         <div
           style={{
@@ -165,7 +157,7 @@ export const Lid = ({
           rotateX: rotate,
           translateY: translate,
           transformStyle: "preserve-3d",
-          transformOrigin: "top",
+          transformOrigin: "bottom",
         }}
         className="absolute inset-0 h-96 w-[32rem] rounded-2xl bg-[#010101] p-2"
       >
